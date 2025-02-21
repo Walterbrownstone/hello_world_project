@@ -1,0 +1,7 @@
+# Ignore build artifacts
+/hello_world
+/src/*.o
+
+# Ignore editor-specific files
+.vscode/
+.idea/
