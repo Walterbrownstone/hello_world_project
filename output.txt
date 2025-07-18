@@ -1,0 +1,4 @@
+Prime Factorial Bit Field Generator
+n = 10
+n! = 3628800
+

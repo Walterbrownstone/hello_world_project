@@ -1,0 +1,31 @@
+Prime Factorial Field Generator
+Calculating up to: 7
+
+n = 1
+  Factorial: 1
+  Next prime: 2
+
+n = 2
+  Factorial: 2
+  Next prime: 3
+
+n = 3
+  Factorial: 6
+  Next prime: 5
+
+n = 4
+  Factorial: 24
+  Next prime: 5
+
+n = 5
+  Factorial: 120
+  Next prime: 7
+
+n = 6
+  Factorial: 720
+  Next prime: 7
+
+n = 7
+  Factorial: 5040
+  Next prime: 11
+

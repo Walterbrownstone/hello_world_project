@@ -1,20 +1,22 @@
 # Compiler
+GMP_LIBS = -lgmp
 CC = gcc
 
 # Compiler flags
 CFLAGS = -Wall -Wextra -std=c99 -Iinclude
 OPTFLAGS = -O3
 
-# Linker flags (for GMP)
+# Linker flags
 LDFLAGS = -lgmp
 
-# Programs to build
-PROGRAMS = hello_world pfield
-
-# Source directory
+# Directories
+BINDIR = bin
 SRCDIR = src
 
-# Source files for each program
+# Programs
+PROGRAMS = hello_world pfield
+
+# Source files
 HELLO_SRCS = $(SRCDIR)/main.c $(SRCDIR)/hello_world.c
 PFIELD_SRCS = $(SRCDIR)/pfield.c
 
@@ -22,24 +24,26 @@ PFIELD_SRCS = $(SRCDIR)/pfield.c
 HELLO_OBJS = $(HELLO_SRCS:.c=.o)
 PFIELD_OBJS = $(PFIELD_SRCS:.c=.o)
 
-# Default target - builds all programs
+# Ensure bin directory exists
+$(shell mkdir -p $(BINDIR))
+
+# Default target
 all: $(PROGRAMS)
 
-# Hello World program
+# Hello World
 hello_world: $(HELLO_OBJS)
-	$(CC) $(CFLAGS) -o $@ $(HELLO_OBJS) $(LDFLAGS)  # Added $(LDFLAGS) here
+	$(CC) $(CFLAGS) -o $(BINDIR)/$@ $(HELLO_OBJS) $(LDFLAGS)
 
-# Prime Field program
+# Prime Field
 pfield: $(PFIELD_OBJS)
-	$(CC) $(CFLAGS) $(OPTFLAGS) -o $@ $(PFIELD_OBJS) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(OPTFLAGS) -o $(BINDIR)/$@ $(PFIELD_OBJS) $(GMP_LIBS)
 
-# Compile source files into object files
+
+# Compile rule
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean up build files
 clean:
-	rm -f $(HELLO_OBJS) $(PFIELD_OBJS) $(PROGRAMS)
+	rm -f $(HELLO_OBJS) $(PFIELD_OBJS) $(addprefix $(BINDIR)/,$(PROGRAMS))
 
-# Phony targets (not actual files)
 .PHONY: all clean
