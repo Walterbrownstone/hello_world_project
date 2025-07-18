@@ -3,36 +3,43 @@ CC = gcc
 
 # Compiler flags
 CFLAGS = -Wall -Wextra -std=c99 -Iinclude
+OPTFLAGS = -O3
 
 # Linker flags (for GMP)
 LDFLAGS = -lgmp
 
-# Target executable
-TARGET = hello_world
+# Programs to build
+PROGRAMS = hello_world pfield
 
 # Source directory
 SRCDIR = src
 
-# Source files
-SRCS = $(SRCDIR)/main.c $(SRCDIR)/hello_world.c
+# Source files for each program
+HELLO_SRCS = $(SRCDIR)/main.c $(SRCDIR)/hello_world.c
+PFIELD_SRCS = $(SRCDIR)/pfield.c
 
 # Object files
-OBJS = $(SRCS:.c=.o)
+HELLO_OBJS = $(HELLO_SRCS:.c=.o)
+PFIELD_OBJS = $(PFIELD_SRCS:.c=.o)
 
-# Default target
-all: $(TARGET)
+# Default target - builds all programs
+all: $(PROGRAMS)
 
-# Link the object files to create the executable
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LDFLAGS)  # <-- TAB, not spaces
+# Hello World program
+hello_world: $(HELLO_OBJS)
+	$(CC) $(CFLAGS) -o $@ $(HELLO_OBJS) $(LDFLAGS)  # Added $(LDFLAGS) here
+
+# Prime Field program
+pfield: $(PFIELD_OBJS)
+	$(CC) $(CFLAGS) $(OPTFLAGS) -o $@ $(PFIELD_OBJS) $(LDFLAGS)
 
 # Compile source files into object files
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@  # <-- TAB, not spaces
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Clean up build files
 clean:
-	rm -f $(OBJS) $(TARGET)  # <-- TAB, not spaces
+	rm -f $(HELLO_OBJS) $(PFIELD_OBJS) $(PROGRAMS)
 
 # Phony targets (not actual files)
 .PHONY: all clean

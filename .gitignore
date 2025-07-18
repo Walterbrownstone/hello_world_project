@@ -1,7 +1,10 @@
-# Ignore build artifacts
-/hello_world
-/src/*.o
+# Compiled files
+/bin/
+*.o
+*.a
+*.so
+*.out
 
-# Ignore editor-specific files
-.vscode/
-.idea/
+# Debug files
+*.dSYM/
+*.exe
