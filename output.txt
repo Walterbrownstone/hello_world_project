@@ -1,4 +1,44 @@
-Prime Factorial Bit Field Generator
-n = 10
-n! = 3628800
+Prime Factorization Pattern for 5! (120 characters):
+Initial pattern: ************************************************************************************************************************
 
+Marking multiples of prime 2:
+Current pattern: *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+Marking multiples of prime 3:
+Current pattern: *---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-*---*-
+
+Marking multiples of prime 5:
+Current pattern: *-----*---*-*---*-*---*-----*-*-----*---*-*---*-*---*-----*-*-----*---*-*---*-*---*-----*-*-----*---*-*---*-*---*-----*-
+
+Prime positions with stars:
+Position 1 (unity)
+Position 7 (prime)
+Position 11 (prime)
+Position 13 (prime)
+Position 17 (prime)
+Position 19 (prime)
+Position 23 (prime)
+Position 29 (prime)
+Position 31 (prime)
+Position 37 (prime)
+Position 41 (prime)
+Position 43 (prime)
+Position 47 (prime)
+Position 53 (prime)
+Position 59 (prime)
+Position 61 (prime)
+Position 67 (prime)
+Position 71 (prime)
+Position 73 (prime)
+Position 79 (prime)
+Position 83 (prime)
+Position 89 (prime)
+Position 97 (prime)
+Position 101 (prime)
+Position 103 (prime)
+Position 107 (prime)
+Position 109 (prime)
+Position 113 (prime)
+Total prime-positioned stars: 28
+Final pattern:
+*-----*---*-*---*-*---*-----*-*-----*---*-*---*-*---*-----*-*-----*---*-*---*-*---*-----*-*-----*---*-*---*-*---*-----*-

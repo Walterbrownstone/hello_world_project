@@ -2,50 +2,88 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
+#include <errno.h>
+#include <stdbool.h>
+#include <math.h>
 
-// Add these declarations if they're not automatically picked up
-extern int __gmp_fprintf(FILE *fp, const char *fmt, ...);
-extern int __gmp_printf(const char *fmt, ...);
-extern int __gmp_sprintf(char *buf, const char *fmt, ...);
+// Renamed this function to avoid naming conflict
+bool check_prime(unsigned long num) {
+    if (num <= 1) return false;
+    if (num == 2) return true;
+    if (num % 2 == 0) return false;
+    for (unsigned long i = 3; i <= sqrt(num); i += 2) {
+        if (num % i == 0) return false;
+    }
+    return true;
+}
 
-void generate_prime_bitfield(mpz_t n, const char *output_file) {
+void generate_prime_pattern(unsigned long n, const char *output_file) {
+    mpz_t factorial;
+    mpz_init(factorial);
+    mpz_fac_ui(factorial, n);
+    unsigned long factorial_val = mpz_get_ui(factorial);
+
+    char *pattern = malloc(factorial_val + 1);
+    memset(pattern, '*', factorial_val);
+    pattern[factorial_val] = '\0';
+
     FILE *fp = fopen(output_file, "w");
-    if (fp == NULL) {
-        perror("Error opening output file");
+    if (!fp) {
+        perror("Error opening file");
+        free(pattern);
+        mpz_clear(factorial);
         return;
     }
 
-    mpz_t factorial;
-    mpz_init(factorial);
-    
-    // Calculate factorial
-    mpz_fac_ui(factorial, mpz_get_ui(n));
-    
-    // Print using GMP functions
-    __gmp_fprintf(fp, "Prime Factorial Bit Field Generator\nn = %Zd\nn! = %Zd\n\n", n, factorial);
-    
-    // Rest of your implementation...
-    
+    fprintf(fp, "Prime Factorization Pattern for %lu! (%lu characters):\n", n, factorial_val);
+    fprintf(fp, "Initial pattern: %s\n\n", pattern);
+
+    // Mark multiples of primes ≤ n
+    for (unsigned long prime = 2; prime <= n; prime++) {
+        if (check_prime(prime)) {
+            fprintf(fp, "Marking multiples of prime %lu:\n", prime);
+            for (unsigned long multiple = prime; multiple <= factorial_val; multiple += prime) {
+                if (pattern[multiple-1] == '*') {
+                    pattern[multiple-1] = '-';
+                }
+            }
+            fprintf(fp, "Current pattern: %s\n\n", pattern);
+        }
+    }
+
+    // Count and list prime-positioned stars
+    unsigned long prime_stars = 0;
+    fprintf(fp, "Prime positions with stars:\n");
+    for (unsigned long pos = 1; pos <= factorial_val; pos++) {
+        if (pattern[pos-1] == '*') {
+            bool is_prime_pos = (pos == 1) || check_prime(pos);
+            if (is_prime_pos) {
+                prime_stars++;
+                fprintf(fp, "Position %lu (%s)\n", pos, pos == 1 ? "unity" : "prime");
+            }
+        }
+    }
+    fprintf(fp, "Total prime-positioned stars: %lu\n", prime_stars);
+    fprintf(fp, "Final pattern:\n%s\n", pattern);
+
+    free(pattern);
     mpz_clear(factorial);
     fclose(fp);
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 5 || strcmp(argv[1], "-n") != 0 || strcmp(argv[3], "-o") != 0) {
-        fprintf(stderr, "Usage: %s -n <number> -o <output.txt>\n", argv[0]);
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s <n> <output_file>\n", argv[0]);
         return 1;
     }
-
-    mpz_t n;
-    mpz_init(n);
-    if (mpz_set_str(n, argv[2], 10) != 0) {
+    
+    errno = 0;
+    unsigned long n = strtoul(argv[1], NULL, 10);
+    if (n == 0 && errno == EINVAL) {
         fprintf(stderr, "Invalid number format\n");
-        mpz_clear(n);
         return 1;
     }
-
-    generate_prime_bitfield(n, argv[4]);
-    mpz_clear(n);
+    
+    generate_prime_pattern(n, argv[2]);
     return 0;
 }
